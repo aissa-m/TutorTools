@@ -33,9 +33,11 @@ Las sugerencias de mejoras, correcciones o nuevas funcionalidades son bienvenida
 
 Contacto
 Si tienes preguntas o comentarios sobre el proyecto, no dudes en contactarme.
-
+/*
       _____   ____
     /      \ |  o | 
    |        |/ ___\| 
    |_________/     
    |_|_| |_|_|
+
+*/
