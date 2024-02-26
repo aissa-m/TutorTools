@@ -1,10 +1,3 @@
-████████╗██╗   ██╗████████╗ ██████╗ ██████╗ 
-╚══██╔══╝██║   ██║╚══██╔══╝██╔═══██╗██╔══██╗
-   ██║   ██║   ██║   ██║   ██║   ██║██████╔╝  
-   ██║   ██║   ██║   ██║   ██║   ██║██╔══██╗ 
-   ██║   ╚██████╔╝   ██║   ╚██████╔╝██║  ██║ 
-   ╚═╝    ╚═════╝    ╚═╝    ╚═════╝ ╚═╝  ╚═╝  
-
 ## TutorTools
 Este proyecto está diseñado para profesores particulares que desean llevar un control eficiente de sus ingresos, pagos recibidos, pagos pendientes, y mantener un registro detallado de sus alumnos. Además, cuenta con una funcionalidad en desarrollo para gestionar reservas y horarios a través de un calendario interactivo.
 
