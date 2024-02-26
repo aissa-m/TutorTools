@@ -1,4 +1,4 @@
 <?php
 session_start();
 session_destroy();
-header('Location: ../../frontEnd/login.html');
+header('Location: ../../web/login.html');
