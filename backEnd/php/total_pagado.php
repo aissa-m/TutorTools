@@ -8,13 +8,15 @@ include 'conexion.php';
 if (isset($_GET['id'])) {
     // Prepara la consulta
     $id = $_GET['id'];
-    $consulta = $conexion->prepare('SELECT SUM(monto) as deuda FROM pagos_pendientes WHERE alumno_id = ?');
+    $consulta = $conexion->prepare('SELECT SUM(monto) as total_pagado FROM ingresos WHERE alumno_id = ?');
     $consulta->bind_param('i', $id);
     // Ejecuta la consulta
     $consulta->execute();
 
     // Obtiene el resultado
     $resultado = $consulta->get_result();
+
+    $datos = 0;
     // Verifica si hay datos
     if ($resultado->num_rows > 0) {
         // Obtiene los datos como un array asociativo

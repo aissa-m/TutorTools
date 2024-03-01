@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     deudas();
+    total_pagado();
 });
 
 function mostrarDetallesAlumno(data) {
@@ -36,9 +37,7 @@ function mostrarDetallesAlumno(data) {
             <p>${data.descripcion}</p>     
             
             <button class="btn btn-secondary editar" id="editar" data-id="${data.id}" data-tipo="alumno">Editar</button>                                
-            <button class="btn btn-danger eliminar" data-id="${data.id}" data-tipo="alumno">Eliminar</button>
-            
-
+            <button class="btn btn-danger eliminar" data-id="${data.id}" data-tipo="alumno">Eliminar</button>         
         <div>
     `;
 
@@ -112,6 +111,33 @@ function deudas() {
                     <div class="card deudas">
                         <div class="card-body">
                             <h5>Pendiente: ${data.deuda}€</h5>
+                        </div>
+                    </div>
+                    
+                `;
+
+                div.insertAdjacentHTML('beforeend', card);
+            }
+        })
+        .catch( error => {
+            console.error('Error del servidor: '+error);
+        })
+    }
+}
+
+function total_pagado() {
+    console.log(alumnoId);
+    if(alumnoId != '' && alumnoId != null){
+        fetch(URL+`total_pagado.php?id=${alumnoId}`)
+        .then(response => response.json())
+        .then( data =>{            
+            console.log(data);
+            if (data.total_pagado !== null) {
+                const div = document.getElementById('deudas');
+                const card = `
+                    <div class="card deudas">
+                        <div class="card-body">
+                            <h5>Total Pagado: ${data.total_pagado}€</h5>
                         </div>
                     </div>
                     

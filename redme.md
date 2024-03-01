@@ -31,7 +31,7 @@ La aplicación te permitirá:
 ## Contribuciones
 Las sugerencias de mejoras, correcciones o nuevas funcionalidades son bienvenidas. Si deseas contribuir al proyecto, no dudes en hacerlo a través del repositorio en GitHub.
 
-Contacto
+## Contacto
 Si tienes preguntas o comentarios sobre el proyecto, no dudes en contactarme.
 
       _____   ____
