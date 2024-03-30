@@ -35,6 +35,7 @@ function mostrarDetallesAlumno(data) {
             <p>${data.email}</p>
             <p>${data.telefono}</p>  
             <p>${data.descripcion}</p>     
+            <p>Fecha de Inscripción: ${data.created_at}</p>     
             
             <button class="btn btn-secondary editar" id="editar" data-id="${data.id}" data-tipo="alumno">Editar</button>                                
             <button class="btn btn-danger eliminar" data-id="${data.id}" data-tipo="alumno">Eliminar</button>         

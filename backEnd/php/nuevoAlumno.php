@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $idProfe = $_POST['idProfe'] ?? null;
 
     // Preparación de la consulta para insertar los datos
-    $query = "INSERT INTO alumnos (nombre, email, telefono, descripcion, idProfe) VALUES (?, ?, ?, ?, ?)";
+    $query = "INSERT INTO alumnos (nombre, email, telefono, descripcion, idProfe, created_at) VALUES (?, ?, ?, ?, ?,CURDATE())";
     $stmt = $conexion->prepare($query);
 
     // Vinculación de parámetros y ejecución de la consulta

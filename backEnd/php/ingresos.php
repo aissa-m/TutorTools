@@ -2,17 +2,17 @@
 
 include 'conexion.php';
 
-
 $data = json_decode(file_get_contents('php://input'), true);
 
 if (isset($data['id'])) {
 
     $idProfe = $data['id'];
     $consulta = $conexion->prepare('SELECT i.fecha, i.monto, a.nombre, i.id
-             FROM ingresos i 
-             JOIN alumnos a on a.id = i.alumno_id
-             WHERE i.idProfe = ?
-             ');
+                FROM ingresos i 
+                JOIN alumnos a on a.id = i.alumno_id
+                WHERE i.idProfe = ?
+                ORDER BY i.fecha ASC
+            ');
     $consulta->bind_param('i', $idProfe);
     $consulta->execute();
     $res = $consulta->get_result();
