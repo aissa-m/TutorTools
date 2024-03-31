@@ -23,9 +23,9 @@ document.addEventListener("DOMContentLoaded", function () {
           <figcaption class="sr-only">John Doe, Web Developer</figcaption>
         </figure>
         <h2 class="mt-4 text-xl font-bold text-indigo-600 dark:text-indigo-400">${data[0].nombre}</h2>
-        <p class="mb-4 text-gray-600 dark:text-gray-300">Ambito: Web Developer</p>
+        <p class="mb-4 text-gray-600 dark:text-gray-300">Ambito: ${data[0].asignatura}</p>
         <div class="flex items-center justify-center">
-          <a href="#" class="btn btn-info">Contact</a>
+          <a href="home.html#contacto" class="btn btn-info">Contact</a>
           <a href="https://aissa-portfolio.com/" target="_blank" class="btn btn-secondary">Portfolio</a>
         </div>
       </div>

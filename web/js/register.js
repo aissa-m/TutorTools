@@ -12,14 +12,27 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(res => res.json())
         .then(data => {
-            console.log(data);
-            const divMensaje = document.getElementById('mensaje');
-            
-            let p = document.createElement('p');
-            p.innerText = 'Registro exitoso!';
-            divMensaje.append(p);
 
-            form.reset(); // Restablecer el formulario utilizando el elemento del formulario directamente
+            if (data.success) {
+                console.log(data);
+                const divMensaje = document.getElementById('mensaje');
+                
+                let p = document.createElement('p');
+                p.innerText = 'Registro exitoso!';
+                divMensaje.append(p);
+
+                form.reset();
+            }
+            else{
+                const divMensaje = document.getElementById('mensaje');
+                divMensaje.classList.remove("text-success");
+                divMensaje.classList.add("text-danger");
+
+                let p = document.createElement('p');
+                p.innerText = 'Email existente!';
+                divMensaje.append(p);
+            }
+            
         })
         .catch(error => {
             console.error('Error del servidor' + error);
