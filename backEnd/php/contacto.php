@@ -2,9 +2,8 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require '../vendor/autoload.php'; // Asegúrate de que la ruta al autoload.php es correcta.
+require '../vendor/autoload.php'; 
 
-// Habilitar CORS para peticiones AJAX, ajusta los headers según tus necesidades.
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 

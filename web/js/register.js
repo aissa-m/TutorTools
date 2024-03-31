@@ -15,10 +15,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (data.success) {
                 console.log(data);
-                const divMensaje = document.getElementById('mensaje');
-                
+                const divMensaje = document.getElementById('mensaje'); 
+                divMensaje.innerHTML = '';
+
                 let p = document.createElement('p');
-                p.innerText = 'Registro exitoso!';
+                p.innerText = 'Registro exitoso!';                
                 divMensaje.append(p);
 
                 form.reset();
@@ -27,7 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const divMensaje = document.getElementById('mensaje');
                 divMensaje.classList.remove("text-success");
                 divMensaje.classList.add("text-danger");
-
+                divMensaje.innerHTML = '';
+                
                 let p = document.createElement('p');
                 p.innerText = 'Email existente!';
                 divMensaje.append(p);
