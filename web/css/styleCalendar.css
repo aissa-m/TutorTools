@@ -53,12 +53,16 @@
     height: 100%;
     background-color: #f4f4f4;
     transition: left 0.3s;
+    z-index: 1000;
 }
 
 .sidebar-menu.open {
     left: 0; /* Muestra el menú */
 }
 
+.sidebar-menu .btn{
+    margin-top: 30px;
+}
 
 #toggleMenu {
     display: none; /* Ocultar inicialmente y mostrar solo en móviles */
@@ -78,7 +82,6 @@
     position: absolute; /* Posicionamiento absoluto con respecto a su contenedor relativo más cercano */
     top: 80px; /* Espacio desde la parte superior del calendario */
     left: 28px; /* Espacio desde la izquierda del calendario */
-   
 }
 
 /* Ajustar la posición y visibilidad en dispositivos móviles */
