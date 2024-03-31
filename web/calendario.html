@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/styleCalendar.css">
     <script src="js/eliminar.js"></script>
-    
+
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -43,7 +43,11 @@
 
             <div class="container mt-5">
 
-                <button id="toggleMenu" class="btn btn-primary">Menú</button>
+                <!-- Elemento para abrir el menú lateral -->
+                <div id="toggleMenu" style="cursor: pointer;">
+                    <img src="img/lateral.png" width="55" height="55" alt="Menu" class="m-5 img-fluid">
+                </div>
+
                 <div id="sidebarMenu" class="sidebar-menu">
                     <button class="btn btn-primary" id="btnMonth">Mes</button>
                     <button class="btn btn-primary" id="btnWeek">Semana</button>
@@ -172,7 +176,8 @@
                                                     name="textColor" required>
                                             </div>
                                             <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                                            <button type="" class="btn btn-danger" id="deleteEventButton">Eliminar</button>
+                                            <button type="" class="btn btn-danger"
+                                                id="deleteEventButton">Eliminar</button>
                                         </form>
                                     </div>
                                 </div>
