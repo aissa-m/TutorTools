@@ -13,16 +13,22 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('currentMonthYear').innerHTML = `<h4>${dateInfo.view.title}</h4>`;
         },
         eventContent: function(arg) {
-            // Crea elementos DOM para la hora y el título del evento
             var timeElement = document.createElement('div');
             timeElement.classList.add('fc-event-time');
-            timeElement.innerHTML = arg.timeText; // Obtén el texto del tiempo del evento
+
+            // Formatea la fecha y hora de inicio y fin del evento
+            var startTime = new Date(arg.event.start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            var endTime = new Date(arg.event.end).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            // Configura el contenido del elemento de tiempo para incluir tanto la hora de inicio como la de fin
+            timeElement.innerHTML = startTime + ' - ' + endTime; 
+            timeElement.style.color ='black'; // Aplica el color del texto
     
             var titleElement = document.createElement('div');
             titleElement.classList.add('fc-event-title');
             titleElement.innerHTML = arg.event.title;
-            timeElement.style.color = arg.textColor;
-
+            titleElement.style.color = arg.textColor; // Aplica el color del texto al título
+    
             var containerElement = document.createElement('div');
             containerElement.appendChild(timeElement);
             containerElement.appendChild(titleElement);

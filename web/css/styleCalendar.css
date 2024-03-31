@@ -1,6 +1,6 @@
 /* Cambiar el color del texto de los nombres de los días */
-.fc-col-header-cell-cushion,.fc-daygrid-day-number, .fc-event-title {
-    color: #4046ff; /* Ajusta este color según necesites */
+.fc-daygrid-day-number, .fc-event-title {
+    color: white; /* Ajusta este color según necesites */
 }
 
 /* Cambiar el color de las líneas de borde */
@@ -10,11 +10,7 @@
     border-color: #fdfdfd !important; /* Ajusta este color según necesites */
 }
 
-/* Asegurar que el texto de los eventos sea legible y no se corte */
-.fc-event-title, .fc-event-time {
-    white-space: normal; /* Permite que el texto ocupe más de una línea */
-    overflow: visible; /* Muestra el contenido incluso si se desborda del contenedor */
-}
+
 
 /* Ajustar el tamaño de la fuente para dispositivos móviles */
 @media (max-width: 767px) {
@@ -99,7 +95,7 @@
 .fc-event-title-container {
     white-space: normal; /* Permite que el texto pase a nuevas líneas */
     overflow: hidden; /* Oculta el texto que desborde el contenedor del evento */
-    color: #60ff40;
+    /* color: #60ff40; */
 }
 
 .fc-event {
@@ -111,9 +107,9 @@
     font-weight: bold; /* Hace que la hora se destaque */
 }
 
-.fc-event-title {
+.fc-event-title{
     font-size: 0.85em; /* Ajusta el tamaño del título del evento */
-    color: #60ff40;
+    /* color: #60ff40; */
 }
 
 
@@ -141,6 +137,44 @@
         display: none;
     }
 }
+
+
+@media (max-width: 767px) {
+    .fc-event-time {
+        font-size: 10px; /* Reduce el tamaño del texto para pantallas pequeñas */
+    }
+}
+
+@media (max-width: 767px) {
+    .fc-event {
+        margin: 1px; /* Reduce el espacio entre eventos */
+    }
+}
+
+@media (max-width: 767px) {
+    .fc-event {
+        padding: 2px; /* Reduce el padding dentro de los eventos */
+    }
+}
+
+.fc-daygrid-event {
+    max-height: none; /* Elimina el máximo de altura si existe uno */
+}
+
+.fc-event-title {
+    overflow: hidden; /* Esconde el texto que sobrepase del contenedor */
+    text-overflow: ellipsis; /* Añade "..." al final del texto cortado */
+    white-space: nowrap; /* Evita que el texto se pase a una nueva línea */
+}
+
+
+.fc-daygrid-day {
+    overflow: hidden; 
+    padding: 10px;
+}
+
+
+
 
 
 
