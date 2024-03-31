@@ -19,7 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
             var titleElement = document.createElement('div');
             titleElement.classList.add('fc-event-title');
             titleElement.innerHTML = arg.event.title;
-    
+            timeElement.style.color = arg.textColor;
+
             var containerElement = document.createElement('div');
             containerElement.appendChild(timeElement);
             containerElement.appendChild(titleElement);
@@ -27,7 +28,21 @@ document.addEventListener('DOMContentLoaded', function() {
             // Retorna el contenedor con la hora y el título
             return { domNodes: [containerElement] };
         },
-        slotDuration: '01:00:00'
+        slotDuration: '01:00:00',
+        eventClick: function(info) {
+            var event = info.event;
+
+            // Llena el formulario con los datos del evento
+            document.getElementById('eventId').value = event.id;
+            document.getElementById('editTitulo').value = event.title;
+            document.getElementById('editDescription').value = event.extendedProps.description;
+            document.getElementById('editStart').value = event.start.toISOString().slice(0,16);
+            document.getElementById('editEnd').value = event.end.toISOString().slice(0,16);
+            document.getElementById('editColor').value = event.backgroundColor;
+            document.getElementById('editTextColor').value = event.textColor;
+            // Muestra el modal
+            $('#editEventModal').modal('show');
+        }
     });
 
     calendar.render();
@@ -127,11 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Cerrar el modal y actualizar el calendario
                 $('#eventModal').modal('hide');
-                // Aquí deberías llamar a una función para actualizar el calendario con el nuevo evento...
-                // Por ejemplo: calendar.refetchEvents(); si estás usando FullCalendar.
-                alert('Evento creado con éxito');
+                calendar.refetchEvents(); 
+
             } else {
                 throw new Error(data.message);
             }
@@ -140,6 +153,78 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
             alert('Error al crear el evento: ' + error.message);
         });
+    });
+    
+
+    document.getElementById('editEventForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Previene el envío normal del formulario
+
+        // Recoge los valores del formulario
+        let id = document.getElementById('eventId').value;
+        let title = document.getElementById('editTitulo').value;
+        let description = document.getElementById('editDescription').value;
+        let start = document.getElementById('editStart').value;
+        let end = document.getElementById('editEnd').value;
+        let color = document.getElementById('editColor').value;
+        let textColor = document.getElementById('editTextColor').value;
+
+        // Crea el objeto FormData para enviar al servidor
+        let formData = new FormData();
+        formData.append('id', id);
+        formData.append('titulo', title);
+        formData.append('descripcion', description);
+        formData.append('inicio', start);
+        formData.append('fin', end);
+        formData.append('color', color);
+        formData.append('textColor', textColor);
+
+        // Realiza la petición al servidor
+        fetch(URL + 'actualizar_evento.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                // Cierra el modal
+                $('#editEventModal').modal('hide');                
+                calendar.refetchEvents(); 
+            } else {
+                throw new Error(data.message || 'Error al actualizar el evento');
+            }
+        })
+        .catch(error => {
+            console.error('Error al actualizar el evento:', error);
+            alert('Error al actualizar el evento: ' + error.message);
+        });
+    });
+
+    document.getElementById('deleteEventButton').addEventListener('click', function() {
+        var eventId = document.getElementById('eventId').value;
+    
+        if(confirm('¿Estás seguro de que deseas eliminar este evento?')) {
+            fetch(URL + 'eliminar_evento.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `id=${eventId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    // Cierra el modal si está abierto
+                    $('#editEventModal').modal('hide');
+                    calendar.refetchEvents(); 
+                } else {
+                    throw new Error(data.message || 'Error al eliminar el evento');
+                }
+            })
+            .catch(error => {
+                console.error('Error al eliminar el evento:', error);
+                alert('Error al eliminar el evento: ' + error.message);
+            });
+        }
     });
     
     
