@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error('Error:', error));
     } else {
         // Manejar el caso de que no haya un ID de alumno disponible
-        console.log('No hay un ID de alumno para mostrar');
+        // console.log('No hay un ID de alumno para mostrar');
     }
 
 
@@ -100,12 +100,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function deudas() {
-    console.log(alumnoId);
     if(alumnoId != '' && alumnoId != null){
         fetch(URL+`deuda.php?id=${alumnoId}`)
         .then(response => response.json())
         .then( data =>{            
-            console.log(data);
             if (data.deuda !== null) {
                 const div = document.getElementById('deudas');
                 const card = `
@@ -127,12 +125,10 @@ function deudas() {
 }
 
 function total_pagado() {
-    console.log(alumnoId);
     if(alumnoId != '' && alumnoId != null){
         fetch(URL+`total_pagado.php?id=${alumnoId}`)
         .then(response => response.json())
         .then( data =>{            
-            console.log(data);
             if (data.total_pagado !== null) {
                 const div = document.getElementById('deudas');
                 const card = `

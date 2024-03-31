@@ -8,7 +8,6 @@ function getPendientes() {
   })
     .then(response => response.json())
     .then(pendientes => {
-      console.log(pendientes);
       const contenedor = document.getElementById("contenedor-pendientes");
       contenedor.innerHTML = ""; // Limpia el contenedor antes de añadir los nuevos datos
 
@@ -111,7 +110,6 @@ function guardarPendiente() {
       var formData = new FormData(this);
       formData.append('monto', monto);
       formData.append('idProfe', idProfe);
-      console.log(formData);
       fetch(URL+"setPagoP.php", {
         method: "POST",
         body: formData,
@@ -121,18 +119,17 @@ function guardarPendiente() {
           if (data === "Exito") {
             location.href = "ingresos_pendientes.html";
           } else {
-            alert("Error al añadir alumno");
+            // alert("Error al añadir alumno");
           }
         })
         .catch((error) => {
-          console.log(error);
-          alert("Error al enviar los datos");
+          // console.log(error);
+          // alert("Error al enviar los datos");
         });
     });
 }
 
 function pagar(idPagoPendiente) {
-  console.log(idPagoPendiente);
   const idProfe = localStorage.getItem('id');
   fetch(URL+"pagar.php", {
     method: "POST",

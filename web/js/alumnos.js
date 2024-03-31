@@ -14,7 +14,6 @@ function getAlumnos() {
         if (data.success) {
             const contenedor = document.getElementById('contenedor-alumnos');
             contenedor.innerHTML = ''; // Limpia el contenido actual del contenedor
-            // console.log(data);
             data.alumnos.forEach(alumno => {
                 const card = `
                     <div class="col-md-4 mb-4 tarjeta-alumno">

@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data[0]);
       const container = document.getElementById("datos");
       const row = `
       <div class="flex min-h-screen items-center justify-center">

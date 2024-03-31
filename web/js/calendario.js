@@ -1,11 +1,13 @@
 const URL = '../../backEnd/php/';
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
+    const idProfe = localStorage.getItem('id');
+
     var calendar = new FullCalendar.Calendar(calendarEl, {
         locale: 'es',
         initialView: 'dayGridMonth',
         headerToolbar: false,
-        events: URL + 'cargar_eventos.php', 
+        events: URL + 'cargar_eventos.php?idProfe=' + idProfe, 
         height: 'auto',
         datesSet: function(dateInfo) {
             document.getElementById('currentMonthYear').innerHTML = `<h4>${dateInfo.view.title}</h4>`;
@@ -118,21 +120,23 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault(); // Prevenir el envío por defecto del formulario
         
         // Recoger los datos del formulario
-        var title = document.getElementById('eventTitle').value;
-        var description = document.getElementById('eventDescription').value;
-        var start = document.getElementById('eventStart').value;
-        var end = document.getElementById('eventEnd').value;
-        var color = document.getElementById('eventColor').value;
-        var textColor = document.getElementById('eventTextColor').value;
-    
+        const title = document.getElementById('eventTitle').value;
+        const description = document.getElementById('eventDescription').value;
+        const start = document.getElementById('eventStart').value;
+        const end = document.getElementById('eventEnd').value;
+        const color = document.getElementById('eventColor').value;
+        const textColor = document.getElementById('eventTextColor').value;
+        const id = localStorage.getItem('id');
+        
         // Crear el objeto FormData para enviar al servidor
-        var formData = new FormData();
+        const formData = new FormData();
         formData.append('titulo', title);
         formData.append('descripcion', description);
         formData.append('inicio', start);
         formData.append('fin', end);
         formData.append('color', color);
         formData.append('textColor', textColor);
+        formData.append('idProfe', id)
     
         // Enviar los datos al servidor mediante Fetch API
         fetch(URL + 'crear_evento.php', {
@@ -160,16 +164,16 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault(); // Previene el envío normal del formulario
 
         // Recoge los valores del formulario
-        let id = document.getElementById('eventId').value;
-        let title = document.getElementById('editTitulo').value;
-        let description = document.getElementById('editDescription').value;
-        let start = document.getElementById('editStart').value;
-        let end = document.getElementById('editEnd').value;
-        let color = document.getElementById('editColor').value;
-        let textColor = document.getElementById('editTextColor').value;
+        const id = document.getElementById('eventId').value;
+        const title = document.getElementById('editTitulo').value;
+        const description = document.getElementById('editDescription').value;
+        const start = document.getElementById('editStart').value;
+        const end = document.getElementById('editEnd').value;
+        const color = document.getElementById('editColor').value;
+        const textColor = document.getElementById('editTextColor').value;
 
         // Crea el objeto FormData para enviar al servidor
-        let formData = new FormData();
+        const formData = new FormData();
         formData.append('id', id);
         formData.append('titulo', title);
         formData.append('descripcion', description);
@@ -200,8 +204,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.getElementById('deleteEventButton').addEventListener('click', function() {
-        var eventId = document.getElementById('eventId').value;
-    
+        const eventId = document.getElementById('eventId').value;
+        
         if(confirm('¿Estás seguro de que deseas eliminar este evento?')) {
             fetch(URL + 'eliminar_evento.php', {
                 method: 'POST',

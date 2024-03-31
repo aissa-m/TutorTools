@@ -143,12 +143,11 @@ function guardarIngreso() {
           if (data === "Exito") {
             location.href = "ingresos.html";
           } else {
-            alert("Error al añadir ingreso");
+            // alert("Error al añadir ingreso");
           }
         })
         .catch((error) => {
-          console.log(error);
-          alert("Error al enviar los datos");
+          // alert("Error al enviar los datos");
         });
     });
 }

@@ -5,9 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const id = e.target.dataset.id;
             const tipo = e.target.dataset.tipo;
 
-            console.log(id);
-            console.log(tipo);
-
             if (confirm('¿Estás seguro de querer eliminar este registro?')) {
                 fetch(URL+'eliminar.php', {
                     method: 'POST',

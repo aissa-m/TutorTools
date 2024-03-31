@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
 
             if (data.success) {
-                console.log(data);
                 const divMensaje = document.getElementById('mensaje'); 
                 divMensaje.innerHTML = '';
 

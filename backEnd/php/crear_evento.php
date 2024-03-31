@@ -13,14 +13,15 @@ $inicio = $_POST['inicio'] ?? '';
 $fin = $_POST['fin'] ?? '';
 $color = $_POST['color'] ?? '';
 $textColor = $_POST['textColor'] ?? '';
+$idProfe = $_POST['idProfe'] ?? '';
 
 // Preparar y ejecutar la consulta SQL para insertar el nuevo evento
-$sql = "INSERT INTO reservas (titulo, descripcion, inicio, fin, color, textColor) VALUES (?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO reservas (titulo, descripcion, inicio, fin, color, textColor, idProfe) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 // Preparar la declaración
 if($stmt = $conexion->prepare($sql)) {
     // Vincular parámetros
-    $stmt->bind_param("ssssss", $titulo, $descripcion, $inicio, $fin, $color, $textColor);
+    $stmt->bind_param("ssssssi", $titulo, $descripcion, $inicio, $fin, $color, $textColor,$idProfe);
     
     // Ejecutar la declaración
     if($stmt->execute()) {
@@ -40,4 +41,4 @@ if($stmt = $conexion->prepare($sql)) {
 
 // Cerrar la conexión
 $conexion->close();
-?>
+

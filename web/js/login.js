@@ -3,14 +3,12 @@ document.addEventListener('DOMContentLoaded', function(){
     document.getElementById("login").addEventListener('submit', function(e){
         e.preventDefault();
         const form = new FormData(this);
-        console.log(form)
         fetch(URL+'login.php', {
             method:'POST',
             body: form
         })
         .then(res => res.json())
         .then( data => {
-            console.log(data);
             if(data.success){
                 const id = data.id;
                 localStorage.setItem('id', id);
