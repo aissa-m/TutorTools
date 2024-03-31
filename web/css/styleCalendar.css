@@ -81,7 +81,7 @@
 #toggleMenu {
     position: absolute; /* Posicionamiento absoluto con respecto a su contenedor relativo más cercano */
     top: 40px; /* Espacio desde la parte superior del calendario */
-    left: -30px; /* Espacio desde la izquierda del calendario */
+    left: -35px; /* Espacio desde la izquierda del calendario */
 }
 
 /* Ajustar la posición y visibilidad en dispositivos móviles */
