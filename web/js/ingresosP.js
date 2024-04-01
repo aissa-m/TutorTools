@@ -105,10 +105,10 @@ function guardarPendiente() {
   document.getElementById("formAgregarPendiente").addEventListener("submit", function (e) {
       e.preventDefault();
       const idProfe = localStorage.getItem('id');
-      const horas = document.getElementById('horas').value;
-      const monto = horas * 12; // Suponiendo que 12 es la tarifa por hora
+      // const horas = document.getElementById('horas').value;
+      // const monto = horas * 12;
       var formData = new FormData(this);
-      formData.append('monto', monto);
+      // formData.append('monto', monto);
       formData.append('idProfe', idProfe);
       fetch(URL+"setPagoP.php", {
         method: "POST",
