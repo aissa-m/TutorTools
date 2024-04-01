@@ -4,7 +4,17 @@ header('Access-Control-Allow-Methods: GET, POST');
 header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
 header('Content-Type: application/json');
 include 'conexion.php';
+// Inicia sesión PHP (si aún no se ha iniciado)
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
+// Verifica si el usuario está autenticado
+// Asegúrate de ajustar esta condición según tu lógica de autenticación
+if (!isset($_SESSION['loged']) || $_SESSION['loged'] != true) {
+    echo json_encode(['error' => 'Acceso denegado. Usuario no autenticado.']);
+    exit; // Detiene la ejecución del script
+}
 // Prepara la consulta
 $consulta = $conexion->prepare('SELECT * FROM alumnos');
 
