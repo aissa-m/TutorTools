@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
         locale: 'es',
+        firstDay: 1,
         initialView: 'dayGridMonth',
         headerToolbar: false,
         events: URL + 'cargar_eventos.php?idProfe=' + idProfe, 
