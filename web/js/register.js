@@ -22,10 +22,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 divMensaje.append(p);
                 form.reset();
 
-                setTimeout(function() {
-                    // cometario
-                    window.location.href = '../login.html'; 
-                }, 2000); 
+                // setTimeout(function() {
+                //     // cometario
+                //     window.location.href = '../web/login.html'; 
+                // }, 2000); 
             }
             
             else{
