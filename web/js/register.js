@@ -14,15 +14,19 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
 
             if (data.success) {
-                const divMensaje = document.getElementById('mensaje'); 
+                const divMensaje = document.getElementById('mensaje');
                 divMensaje.innerHTML = '';
-
+            
                 let p = document.createElement('p');
-                p.innerText = 'Registro exitoso!';                
+                p.innerText = 'Registro exitoso!';
                 divMensaje.append(p);
-
                 form.reset();
+
+                setTimeout(function() {
+                    window.location.href = '../login.html'; 
+                }, 2000); 
             }
+            
             else{
                 const divMensaje = document.getElementById('mensaje');
                 divMensaje.classList.remove("text-success");
