@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 form.reset();
 
                 setTimeout(function() {
+                    // cometario
                     window.location.href = '../login.html'; 
                 }, 2000); 
             }
