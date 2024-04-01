@@ -11,6 +11,9 @@ document.addEventListener("DOMContentLoaded", function () {
     .then((res) => res.json())
     .then((data) => {
       const container = document.getElementById("datos");
+      if (data[0].asignatura == null || data[0].asignatura == '') {
+        data[0].asignatura = 'Sin Especificar';
+      }
       const row = `
       <div class="flex min-h-screen items-center justify-center">
       <div class="w-64 rounded-lg border-2 border-indigo-500 bg-transparent p-4 text-center shadow-lg dark:bg-gray-800">

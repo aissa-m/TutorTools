@@ -30,9 +30,9 @@
         </div>
         <div class="heading">Registro</div>
         <form action="register.html" class="form" id="register">
-            <input required="" class="input" type="email" name="email" id="email" placeholder="E-mail">
-            <input required="" class="input" type="text" name="nombre" id="nombre" placeholder="Nombre">
-            <select class="input" name="asignatura" id="asignatura">
+            <input required class="input" type="email" name="email" id="email" placeholder="E-mail">
+            <input required class="input" type="text" name="nombre" id="nombre" placeholder="Nombre">
+            <select class="input" name="asignatura" id="asignatura" required>
                 <option value="" selected>Seleccione Ámbito</option>
                 <option value="Matemáticas">Matemáticas</option>
                 <option value="Física">Física</option>
@@ -50,7 +50,7 @@
             </select>
             
             
-            <input required="" class="input" type="password" name="password" id="password" placeholder="Password">
+            <input required class="input" type="password" name="password" id="password" placeholder="Password">
             <span class="forgot-password"><a href="login.html">Ya está registrado ?</a></span>
             <input class="login-button" type="submit" value="Registrarse">
         </form>
