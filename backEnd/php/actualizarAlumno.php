@@ -1,7 +1,13 @@
 <?php
-    header('Content-Type: application/json');
+header('Content-Type: application/json');
 include 'conexion.php';
-
+session_start();
+// Verificar la autenticación del usuario
+if (!isset($_SESSION['loged'])) {
+    http_response_code(403); // Forbidden
+    echo json_encode(["error" => "Acceso denegado"]);
+    exit;
+}
 // Asumiendo que recibes los campos 'nombre', 'email', 'telefono', 'descripcion' y 'id' del formulario
 $nombre = $_POST['nombre'];
 $email = $_POST['email'];

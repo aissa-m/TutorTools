@@ -1,8 +1,14 @@
 <?php
 include 'conexion.php';
-$data = json_decode(file_get_contents('php://input'), true);
-if (isset($data['id'])) {
-    $id = $data['id'];
+session_start();
+// Verificar la autenticación del usuario
+if (!isset($_SESSION['loged'])) {
+    http_response_code(403); // Forbidden
+    echo json_encode(["error" => "Acceso denegado"]);
+    exit;
+}
+if (isset($_SESSION['userId'])) {
+    $id = $_SESSION['userId'];
 
     $consulta = $conexion->prepare('SELECT * FROM usuarios WHERE id = ?');
     $consulta->bind_param('i', $id);

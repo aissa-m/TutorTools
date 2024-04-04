@@ -7,15 +7,21 @@ header('Content-Type: application/json');
 
 // Inclusión del archivo de conexión a la base de datos
 include 'conexion.php';
-
+session_start();
+// Verificar la autenticación del usuario
+if (!isset($_SESSION['loged'])) {
+    http_response_code(403); // Forbidden
+    echo json_encode(["error" => "Acceso denegado"]);
+    exit;
+}
 // Verificación de la recepción de datos mediante POST
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['userId'])) {
     // Obtención de datos del formulario
     $nombre = isset($_POST['nombre']) ? $_POST['nombre'] : null;
     $email = isset($_POST['email']) ? $_POST['email'] : null;
     $telefono = isset($_POST['telefono']) ? $_POST['telefono'] : null;
     $descripcion = isset($_POST['descripcion']) ? $_POST['descripcion'] : '';
-    $idProfe = $_POST['idProfe'] ?? null;
+    $idProfe = $_SESSION['userId'] ?? null;
 
     // Preparación de la consulta para insertar los datos
     $query = "INSERT INTO alumnos (nombre, email, telefono, descripcion, idProfe, created_at) VALUES (?, ?, ?, ?, ?,CURDATE())";

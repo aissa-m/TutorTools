@@ -6,6 +6,14 @@ include 'conexion.php';
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
+session_start();
+// Verificar la autenticación del usuario
+if (!isset($_SESSION['loged'])) {
+    http_response_code(403); // Forbidden
+    echo json_encode(["error" => "Acceso denegado"]);
+    exit;
+}
+
 // Recoger datos del POST
 $titulo = $_POST['titulo'] ?? '';
 $descripcion = $_POST['descripcion'] ?? '';

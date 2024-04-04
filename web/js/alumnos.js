@@ -72,12 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const idProfe = localStorage.getItem("id");
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-
-    // Usa Fetch API para enviar los datos aquí
-    // Ejemplo básico de cómo enviar los datos con Fetch y FormData
     var formData = new FormData(form);
-    formData.append("idProfe", idProfe);
-
     fetch(URL + "nuevoAlumno.php", {
       method: "POST",
       body: formData,

@@ -102,14 +102,7 @@ function getIngresos() {
 }
 
 function cargarAlumnos() {
-  const id = localStorage.getItem('id');
-  fetch(URL+"alumnos.php", {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({id: id}) // Convertir objeto a cadena JSON
-})
+  fetch(URL + "getStudents_back.php")
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
@@ -130,10 +123,7 @@ function guardarIngreso() {
     .getElementById("formAgregarIngreso")
     .addEventListener("submit", function (e) {
       e.preventDefault();
-
-      const idProfe = localStorage.getItem('id');
       var formData = new FormData(this);
-      formData.append('idProfe', idProfe);
       fetch(URL+"setIngreso.php", {
         method: "POST",
         body: formData,

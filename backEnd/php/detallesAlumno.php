@@ -5,14 +5,23 @@ header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
 header('Content-Type: application/json');
 include 'conexion.php';
 
+session_start();
+// Verificar la autenticación del usuario
+if (!isset($_SESSION['loged'])) {
+    http_response_code(403); // Forbidden
+    echo json_encode(["error" => "Acceso denegado"]);
+    exit;
+}
+
+$idProfe = $_SESSION["userId"];
 // Asegúrate de validar y sanear el ID para prevenir inyecciones SQL
 $alumnoId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 // Prepara la consulta con parámetros para evitar inyecciones SQL
-$consulta = $conexion->prepare('SELECT * FROM alumnos WHERE id = ?');
+$consulta = $conexion->prepare('SELECT * FROM alumnos WHERE id = ? and idProfe = ?');
 
 // Vincula el parámetro 'id' a la consulta
-$consulta->bind_param('i', $alumnoId);
+$consulta->bind_param('ii', $alumnoId, $idProfe);
 
 // Ejecuta la consulta
 $consulta->execute();

@@ -1,5 +1,14 @@
 <?php
 require 'conexion.php';
+session_start();
+
+// Verificar la autenticación del usuario
+if (!isset($_SESSION['loged'])) {
+    http_response_code(403); // Forbidden
+    echo json_encode(["error" => "Acceso denegado"]);
+    exit;
+}
+
 if(isset($_POST['id'])) {
     $id = $_POST['id'];
     // Asume conexión $conexion a la base de datos

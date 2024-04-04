@@ -2,8 +2,17 @@
 include 'conexion.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
+session_start();
 
-if ($data) {
+// Verificar la autenticación del usuario
+if (!isset($_SESSION['loged'])) {
+    http_response_code(403); // Forbidden
+    echo json_encode(["error" => "Acceso denegado"]);
+    exit;
+}
+
+$idProfe = $_SESSION["userId"];
+if ($data && $idProfe) {
     $id = $data['id'];
     $tipo = $data['tipo'];
     $tabla = '';
@@ -21,8 +30,8 @@ if ($data) {
     }
 
     if ($tabla) {
-        $consulta = $conexion->prepare("DELETE FROM $tabla WHERE id = ?");
-        $consulta->bind_param('i', $id);
+        $consulta = $conexion->prepare("DELETE FROM $tabla WHERE id = ? and idProfe = ?");
+        $consulta->bind_param('ii', $id, $idProfe);
         if ($consulta->execute()) {
             if ($conexion->affected_rows > 0) {
                 echo json_encode('Exito');

@@ -1,54 +1,58 @@
-const URL = '../../backEnd/php/';
+const URL = "../../backEnd/php/";
 function getPendientes() {
-  const id = localStorage.getItem('id');
-  fetch(URL+'getPagosPendientes.php', {
-    method: 'POST',
-    headers:{'Content-Type': 'application/json'},
-    body: JSON.stringify({id:id})
+  fetch(URL + "getPagosPendientes.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
   })
-    .then(response => response.json())
-    .then(pendientes => {
+    .then((response) => response.json())
+    .then((pendientes) => {
       const contenedor = document.getElementById("contenedor-pendientes");
-      contenedor.innerHTML = ""; // Limpia el contenedor antes de añadir los nuevos datos
-
+      contenedor.innerHTML = "";
       if (pendientes === "No hay datos") {
         document.getElementById("titulo").innerText = "No hay datos todavía!";
       } else {
-        // Agrupar los pendientes por alumno
         const pendientesPorAlumno = pendientes.reduce((acc, pendiente) => {
-          // Si el alumno aún no existe en el acumulador, lo inicializa
           if (!acc[pendiente.nombre]) {
             acc[pendiente.nombre] = {
               nombre: pendiente.nombre,
               pagos: [],
-              total: 0
+              total: 0,
             };
           }
-          // Añade el pendiente al alumno y suma al total
           acc[pendiente.nombre].pagos.push({
             monto: pendiente.monto,
             fecha: pendiente.fecha,
             horas: pendiente.horas,
-            id: pendiente.id
+            id: pendiente.id,
           });
           acc[pendiente.nombre].total += parseFloat(pendiente.monto);
           return acc;
         }, {});
 
         // Crear una tarjeta por alumno
-        Object.values(pendientesPorAlumno).forEach(alumno => {
+        Object.values(pendientesPorAlumno).forEach((alumno) => {
           const tarjeta = `
             <div class="col-md-4 mb-4">
               <div class="card h-100" style="background-color: rgba(0, 0, 0, 0.2);">
                 <div class="card-body d-flex flex-column">
                   <h5 class="card-title">${alumno.nombre}</h5>
-                  ${alumno.pagos.map(pago => `
+                  ${alumno.pagos
+                    .map(
+                      (pago) => `
                     <p class="card-text">${pago.monto}€ - ${pago.fecha}</p>
-                  `).join('')}
-                  <p class="card-text mt-auto"><strong>Total pendiente: ${alumno.total.toFixed(2)}€</strong></p>
+                  `
+                    )
+                    .join("")}
+                  <p class="card-text mt-auto"><strong>Total pendiente: ${alumno.total.toFixed(
+                    2
+                  )}€</strong></p>
                   <div class="mt-2">
-                    <button class='btn btn-success pagarBtn' data-id='${alumno.pagos[0].id}'>Pagar Último</button>
-                    <button class="btn btn-danger eliminar" data-id="${alumno.pagos[0].id}" data-tipo="pendiente">Eliminar</button>
+                    <button class='btn btn-success pagarBtn' data-id='${
+                      alumno.pagos[0].id
+                    }'>Pagar Último</button>
+                    <button class="btn btn-danger eliminar" data-id="${
+                      alumno.pagos[0].id
+                    }" data-tipo="pendiente">Eliminar</button>
                   </div>
                 </div>
               </div>
@@ -61,30 +65,21 @@ function getPendientes() {
         addEventListenersToButtons();
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("Error:", error);
     });
 }
 
-
 function addEventListenersToButtons() {
-  document.querySelectorAll(".pagarBtn").forEach(button => {
-    button.addEventListener("click", function() {
+  document.querySelectorAll(".pagarBtn").forEach((button) => {
+    button.addEventListener("click", function () {
       pagar(this.getAttribute("data-id"));
     });
   });
 }
 
-
 function cargarAlumnos() {
-  const id = localStorage.getItem('id');
-  fetch(URL+"alumnos.php", {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({id: id}) // Convertir objeto a cadena JSON
-})
+  fetch(URL + "getStudents_back.php")
     .then((response) => response.json())
     .then((data) => {
       // console.log(data)
@@ -96,21 +91,21 @@ function cargarAlumnos() {
           option.textContent = alumno.nombre;
           select.appendChild(option);
         });
-      }      
+      }
     })
     .catch((error) => console.error("Error:", error));
 }
 
 function guardarPendiente() {
-  document.getElementById("formAgregarPendiente").addEventListener("submit", function (e) {
+  document
+    .getElementById("formAgregarPendiente")
+    .addEventListener("submit", function (e) {
       e.preventDefault();
-      const idProfe = localStorage.getItem('id');
       // const horas = document.getElementById('horas').value;
       // const monto = horas * 12;
       var formData = new FormData(this);
       // formData.append('monto', monto);
-      formData.append('idProfe', idProfe);
-      fetch(URL+"setPagoP.php", {
+      fetch(URL + "setPagoP.php", {
         method: "POST",
         body: formData,
       })
@@ -123,20 +118,19 @@ function guardarPendiente() {
           }
         })
         .catch((error) => {
-          // console.log(error);
+          console.error('Ha habido un error' +error);
           // alert("Error al enviar los datos");
         });
     });
 }
 
 function pagar(idPagoPendiente) {
-  const idProfe = localStorage.getItem('id');
-  fetch(URL+"pagar.php", {
+  fetch(URL + "pagar.php", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ id: idPagoPendiente, idProfe: idProfe}),
+    body: JSON.stringify({ id: idPagoPendiente }),
   })
     .then((response) => response.json())
     .then((res) => {
@@ -152,24 +146,22 @@ function pagar(idPagoPendiente) {
     });
 }
 
-
-function getTotalPendiente(){
-  const id = localStorage.getItem('id');
-  fetch(URL+'getTotalP.php', {
-    method: 'POST',
-    headers:{'Content-Type': 'application/json'},
-    body: JSON.stringify({id:id})
+function getTotalPendiente() {
+  fetch(URL + "getTotalP.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
   })
-  .then(response => response.json())
-  .then( total =>{
-    const card = document.getElementById('totalP');
-    const cardBody = `
+    .then((response) => response.json())
+    .then((total) => {
+      console.log(total)
+      const card = document.getElementById("totalP");
+      const cardBody = `
       <div class="card-body"> 
         <h5 class="">Total Pendiente: ${total}€</h5>
       </div>
     `;
-    card.insertAdjacentHTML('beforeend', cardBody);
-  })
+      card.insertAdjacentHTML("beforeend", cardBody);
+    });
 }
 document.addEventListener("DOMContentLoaded", function () {
   getPendientes();

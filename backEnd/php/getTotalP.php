@@ -1,11 +1,14 @@
 <?php
-
 include 'conexion.php';
+session_start();
+if (!isset($_SESSION['loged'])) {
+    http_response_code(403); // Forbidden
+    echo json_encode(["error" => "Acceso denegado"]);
+    exit;
+}
 
-$data = json_decode(file_get_contents('php://input'), true);
-
-if (isset($data['id'])) {
-    $idProfe = $data['id'];
+if (isset($_SESSION['userId'])) {
+    $idProfe = $_SESSION['userId'];
     $consulta = $conexion->prepare('SELECT SUM(monto) AS total FROM pagos_pendientes WHERE idProfe = ?');
     $consulta->bind_param('i', $idProfe);
     $consulta->execute();

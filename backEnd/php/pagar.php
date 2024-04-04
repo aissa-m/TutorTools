@@ -1,12 +1,17 @@
 <?php
-
 include 'conexion.php';
-
 $data = json_decode(file_get_contents('php://input'), true);
+session_start();
+// Verificar la autenticación del usuario
+if (!isset($_SESSION['loged'])) {
+    http_response_code(403); // Forbidden
+    echo json_encode(["error" => "Acceso denegado"]);
+    exit;
+}
 
-if (isset($data['id'])) {
+if (isset($data['id']) && isset($_SESSION['userId'])) {
     $id = $data['id'];
-    $idProfe = $data['idProfe'];
+    $idProfe = $_SESSION['userId'];
 
     // Primero, selecciona el pago pendiente para obtener los detalles
     $consulta = $conexion->prepare('SELECT * FROM pagos_pendientes WHERE id = ?');

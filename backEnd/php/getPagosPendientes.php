@@ -1,11 +1,16 @@
 <?php
-
 include 'conexion.php';
 
-$data = json_decode(file_get_contents('php://input'), true);
+session_start();
+// Verificar la autenticación del usuario
+if (!isset($_SESSION['loged'])) {
+    http_response_code(403); // Forbidden
+    echo json_encode(["error" => "Acceso denegado"]);
+    exit;
+}
 
-if (isset($data['id'])) {
-    $idProfe = $data['id'];
+if (isset($_SESSION['userId'])) {
+    $idProfe = $_SESSION['userId'];
     $consulta = $conexion->
         prepare('SELECT p.fecha, p.monto, a.nombre, p.horas, p.id
                 FROM pagos_pendientes p 
@@ -25,4 +30,7 @@ if (isset($data['id'])) {
     } else {
         echo json_encode('No hay datos');
     }
+}
+else{
+    echo json_encode(['error'=> 'Datos inexistentes.']);
 }

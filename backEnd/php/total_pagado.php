@@ -4,12 +4,21 @@ header('Access-Control-Allow-Methods: GET, POST');
 header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
 header('Content-Type: application/json');
 include 'conexion.php';
+session_start();
+// Verificar la autenticación del usuario
+if (!isset($_SESSION['loged'])) {
+    http_response_code(403); // Forbidden
+    echo json_encode(["error" => "Acceso denegado"]);
+    exit;
+}
 
-if (isset($_GET['id'])) {
+
+if (isset($_GET['id']) && isset($_SESSION['userId'])) {
     // Prepara la consulta
     $id = $_GET['id'];
-    $consulta = $conexion->prepare('SELECT SUM(monto) as total_pagado FROM ingresos WHERE alumno_id = ?');
-    $consulta->bind_param('i', $id);
+    $idProfe = $_SESSION['userId'];
+    $consulta = $conexion->prepare('SELECT SUM(monto) as total_pagado FROM ingresos WHERE alumno_id = ? and idProfe = ?');
+    $consulta->bind_param('ii', $id, $idProfe);
     // Ejecuta la consulta
     $consulta->execute();
 
