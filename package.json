@@ -1,0 +1,18 @@
+{
+  "name": "tutor-tools",
+  "version": "1.0.0",
+  "description": "Este proyecto está diseñado para profesores particulares que desean llevar un control eficiente de sus ingresos, pagos recibidos, pagos pendientes, y mantener un registro detallado de sus alumnos. Además, cuenta con una funcionalidad en desarrollo para gestionar reservas y horarios a través de un calendario interactivo.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "terser-webpack-plugin": "^5.3.10",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

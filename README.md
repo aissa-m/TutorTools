@@ -33,3 +33,7 @@ Si tienes preguntas o comentarios sobre el proyecto, no dudes en contactarme.
    |        |/ ___\| 
    |_________/     
    |_|_| |_|_|
+
+
+let an = await fetch(URL+"getStudents_back.php").then(response => response.json())
+console.log(an)

@@ -1,11 +1,6 @@
   const URL = '../../backEnd/php/';
   function getAlumnos() {
-    fetch(URL + "getStudents_back.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      }
-    })
+    fetch(URL + "getStudents_back.php")
       .then((response) => response.json()) // Convierte la respuesta a JSON
       .then((data) => {
         
