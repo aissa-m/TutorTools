@@ -24,9 +24,11 @@ if (isset($_POST['email'], $_POST['password'])) {
         if ($user) {
             // Verificar la contraseña
             if (password_verify($password, $user['contra'])) {
-                $_SESSION['loged'] = true;
-                // Login exitoso
                 $id = $user['id'];
+                $_SESSION['loged'] = true;
+                $_SESSION['userId'] = $id;
+                // Login exitoso
+                
                 echo json_encode(["success" => true, "message" => "Login exitoso", "id" => $id]);
             } else {
                 // Contraseña incorrecta

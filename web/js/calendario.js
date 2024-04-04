@@ -1,14 +1,13 @@
 const URL = '../../backEnd/php/';
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
-    const idProfe = localStorage.getItem('id');
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
         locale: 'es',
         firstDay: 1,
         initialView: 'dayGridMonth',
         headerToolbar: false,
-        events: URL + 'cargar_eventos.php?idProfe=' + idProfe, 
+        events: URL + 'cargar_eventos.php', 
         height: 'auto',
         datesSet: function(dateInfo) {
             document.getElementById('currentMonthYear').innerHTML = `<h4>${dateInfo.view.title}</h4>`;

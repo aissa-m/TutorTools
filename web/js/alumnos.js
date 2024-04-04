@@ -1,40 +1,38 @@
-const URL = "../../backEnd/php/";
-
-function getAlumnos() {
-  const id = localStorage.getItem("id");
-  fetch(URL + "alumnos.php", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ id: id }), // Convertir objeto a cadena JSON
-  })
-    .then((response) => response.json()) // Convierte la respuesta a JSON
-    .then((data) => {
-      if (data.success) {
-        const contenedor = document.getElementById("contenedor-alumnos");
-        contenedor.innerHTML = ""; // Limpia el contenido actual del contenedor
-        data.alumnos.forEach((alumno) => {
-          const card = `
-                    <div class="col-md-4 mb-4 tarjeta-alumno">
-                        <div class="card" style="background-color: rgba(0, 0, 0, 0.2);" onclick="verDetallesAlumno(${alumno.id})">
-                            <div class="card-body">
-                                <h5 class="card-title">${alumno.nombre}</h5>                                
-                            </div>
-                        </div>
-                    </div>
-                `;
-          contenedor.insertAdjacentHTML("beforeend", card);
-        });
-      } else {
-        const h2 = document.getElementById("titulo");
-        h2.innerText = "No hay datos todavia!";
+  const URL = '../../backEnd/php/';
+  function getAlumnos() {
+    fetch(URL + "getStudents_back.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       }
     })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-}
+      .then((response) => response.json()) // Convierte la respuesta a JSON
+      .then((data) => {
+        
+        if (data.success) {
+          const contenedor = document.getElementById("contenedor-alumnos");
+          contenedor.innerHTML = ""; // Limpia el contenido actual del contenedor
+          data.alumnos.forEach((alumno) => {
+            const card = `
+                      <div class="col-md-4 mb-4 tarjeta-alumno">
+                          <div class="card" style="background-color: rgba(0, 0, 0, 0.2);" onclick="verDetallesAlumno(${alumno.id})">
+                              <div class="card-body">
+                                  <h5 class="card-title">${alumno.nombre}</h5>                                
+                              </div>
+                          </div>
+                      </div>
+                  `;
+            contenedor.insertAdjacentHTML("beforeend", card);
+          });
+        } else {
+          const h2 = document.getElementById("titulo");
+          h2.innerText = "No hay datos todavia!";
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
 
 document.addEventListener("DOMContentLoaded", function () {
   getAlumnos();
