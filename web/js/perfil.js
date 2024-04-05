@@ -1,6 +1,5 @@
 const URL = "../../backEnd/php/";
 document.addEventListener("DOMContentLoaded", function () {
-  const id = localStorage.getItem("id");
   fetch(URL + "perfil.php")
     .then((res) => res.json())
     .then((data) => {
