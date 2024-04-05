@@ -1,12 +1,16 @@
 <?php
-
 include 'conexion.php';
-
+session_start();
 $data = json_decode(file_get_contents('php://input'), true);
+if (!isset($_SESSION['loged'])) {
+    http_response_code(403); // Forbidden
+    echo json_encode(["error" => "Acceso denegado"]);
+    exit;
+}
 
-if (isset($data['id'])) {
+if (isset($_SESSION['userId'])) {
 
-    $idProfe = $data['id'];
+    $idProfe = $_SESSION['userId'];
     $consulta = $conexion->prepare('SELECT i.fecha, i.monto, a.nombre, i.id
                 FROM ingresos i 
                 JOIN alumnos a on a.id = i.alumno_id

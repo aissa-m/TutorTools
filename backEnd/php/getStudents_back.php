@@ -2,7 +2,7 @@
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 session_start();
-
+include 'conexion.php'; 
 // Verificar la autenticación del usuario
 if (!isset($_SESSION['loged'])) {
     http_response_code(403); // Forbidden
@@ -10,12 +10,7 @@ if (!isset($_SESSION['loged'])) {
     exit;
 }
 
-include 'conexion.php'; // Asegúrate de que la ruta a tu script de conexión es correcta
-
-$data = json_decode(file_get_contents('php://input'), true);
-
-// Validación de entrada
-// if (isset($data['id']) && is_numeric($data['id'])) {
+if (isset($_SESSION['userId'])) {
     $idProfe = $_SESSION['userId'];
     $consulta = $conexion->prepare('SELECT * FROM alumnos WHERE idProfe = ?');
     $consulta->bind_param('i', $idProfe);
@@ -36,8 +31,8 @@ $data = json_decode(file_get_contents('php://input'), true);
         echo json_encode(["success" => false, "message" => "Error al ejecutar la consulta"]);
     }
     $consulta->close();
-// } else {
-//     echo json_encode(["success" => false, "message" => "Datos incompletos o id inválido"]);
-// }
+} else {
+    echo json_encode(["success" => false, "message" => "Datos incompletos o id inválido"]);
+}
 $conexion->close();
 ?>

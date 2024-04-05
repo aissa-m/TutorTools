@@ -1,6 +1,4 @@
 const URL = '../../backEnd/php/';
-
-
 function mesNombre(cadenaMes) {
   const meses = [
     "Enero",
@@ -42,11 +40,9 @@ function agruparIngresosPorMes(ingresos) {
 
 
 function getIngresos() {
-  const id = localStorage.getItem('id');
   fetch(URL+'ingresos.php', {
     method: 'POST',
     headers:{'Content-Type': 'application/json'},
-    body: JSON.stringify({id:id})
   })
     .then((response) => response.json())
     .then((ingresos) => {
