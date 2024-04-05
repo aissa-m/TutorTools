@@ -1,4 +1,4 @@
-const URL = "../../backEnd/php/";
+// const URL = "../../backEnd/php/";
 document.addEventListener("DOMContentLoaded", function () {
   fetch(URL + "perfil.php")
     .then((res) => res.json())

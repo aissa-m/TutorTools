@@ -1,3 +1,5 @@
+// const URL = '../../backEnd/php/';
+  
 fetch(URL + "compruebaSesion.php")
   .then((res) => res.json())
   .then((data) => {
