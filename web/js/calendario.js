@@ -125,6 +125,25 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('createEventForm').addEventListener('submit', function(e) {
         e.preventDefault(); // Prevenir el envío por defecto del formulario
         
+        const tituloEvento = document.getElementById("eventTitle");
+        const descripcionEvento = document.getElementById("eventDescription");
+
+        // Validación del título del evento para evitar inyecciones de código
+        if (!/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ.,;:!¿?¡()'-]*$/.test(tituloEvento.value)) {
+            tituloEvento.classList.add("is-invalid");
+            alert("El título del evento contiene caracteres no permitidos.");
+            e.preventDefault(); // Detiene la envío del formulario
+            return false;
+        }
+
+        // Validación de la descripción del evento para evitar inyecciones de código
+        if (!/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ.,;:!¿?¡()'-]*$/.test(descripcionEvento.value)) {
+            descripcionEvento.classList.add("is-invalid");
+            alert("La descripción del evento contiene caracteres no permitidos.");
+            e.preventDefault(); // Detiene la envío del formulario
+            return false;
+        }
+        
         // Recoger los datos del formulario
         const title = document.getElementById('eventTitle').value;
         const description = document.getElementById('eventDescription').value;

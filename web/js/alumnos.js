@@ -1,14 +1,13 @@
-  const URL = '../../backEnd/php/';
-  function getAlumnos() {
-    fetch(URL + "getStudents_back.php")
-      .then((response) => response.json()) // Convierte la respuesta a JSON
-      .then((data) => {
-        
-        if (data.success) {
-          const contenedor = document.getElementById("contenedor-alumnos");
-          contenedor.innerHTML = ""; // Limpia el contenido actual del contenedor
-          data.alumnos.forEach((alumno) => {
-            const card = `
+const URL = "../../backEnd/php/";
+function getAlumnos() {
+  fetch(URL + "getStudents_back.php")
+    .then((response) => response.json()) // Convierte la respuesta a JSON
+    .then((data) => {
+      if (data.success) {
+        const contenedor = document.getElementById("contenedor-alumnos");
+        contenedor.innerHTML = ""; // Limpia el contenido actual del contenedor
+        data.alumnos.forEach((alumno) => {
+          const card = `
                       <div class="col-md-4 mb-4 tarjeta-alumno">
                           <div class="card" style="background-color: rgba(0, 0, 0, 0.2);" onclick="verDetallesAlumno(${alumno.id})">
                               <div class="card-body">
@@ -17,17 +16,17 @@
                           </div>
                       </div>
                   `;
-            contenedor.insertAdjacentHTML("beforeend", card);
-          });
-        } else {
-          const h2 = document.getElementById("titulo");
-          h2.innerText = "No hay datos todavia!";
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }
+          contenedor.insertAdjacentHTML("beforeend", card);
+        });
+      } else {
+        const h2 = document.getElementById("titulo");
+        h2.innerText = "No hay datos todavia!";
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   getAlumnos();
@@ -64,7 +63,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Sustituye el manejo de tu formulario aquí con Fetch API
   const form = document.getElementById("formAgregarAlumno");
-  const idProfe = localStorage.getItem("id");
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     var formData = new FormData(form);
@@ -92,6 +90,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const inputTelefono = document.getElementById("telefonoAlumno");
   const btnGuardarAlumno = document.getElementById("btnGuardarAlumno");
+  const inputNombre = document.getElementById("nombreAlumno");
+  const inputEmail = document.getElementById("emailAlumno");
+  const inputDescripcion = document.getElementById("descripcionAlumno");
 
   inputTelefono.addEventListener("input", function () {
     var telefono = this.value;
@@ -121,4 +122,70 @@ document.addEventListener("DOMContentLoaded", function () {
       btnGuardarAlumno.disabled = true; // Deshabilita el botón de guardar
     }
   });
+
+  // Validación de nombre
+  inputNombre.addEventListener("input", function () {
+    const nombre = this.value;
+    // Solo permite texto y espacios, longitud mínima de 5 letras
+    if (!/^[A-Za-z\s]{5,}$/.test(nombre)) {
+      this.classList.add("is-invalid");
+      btnGuardarAlumno.disabled = true;
+    } else {
+      this.classList.remove("is-invalid");
+      this.classList.add("is-valid");
+      btnGuardarAlumno.disabled = false;
+    }
+  });
+
+  // Validación de email
+  inputEmail.addEventListener("input", function () {
+    const email = this.value;
+    // Formato básico de email y comienza por letras con al menos 5 caracteres antes del @
+    if (!/^[A-Za-z]{5,}.*@.*\..*$/.test(email)) {
+      this.classList.add("is-invalid");
+      btnGuardarAlumno.disabled = true;
+    } else {
+      this.classList.remove("is-invalid");
+      this.classList.add("is-valid");
+      btnGuardarAlumno.disabled = false;
+    }
+
+    // Aquí podrías agregar una llamada a la API para verificar si el email ya existe
+  });
+
+  // Validación de descripción
+  inputDescripcion.addEventListener("input", function () {
+    const descripcion = this.value;
+
+    // Permite texto, espacios y ciertos caracteres especiales
+    if (!/^[A-Za-z\s\(\)\.,;]+$/.test(descripcion)) {
+      this.classList.add("is-invalid");
+      btnGuardarAlumno.disabled = true;
+    } else {
+      this.classList.remove("is-invalid");
+      this.classList.add("is-valid");
+      btnGuardarAlumno.disabled = false;
+    }
+  });
+
+  // Función para verificar si el email ya existe (ejemplo hipotético)
+    /*async function verificarEmail(email) {
+      try {
+          const response = await fetch('API_ENDPOINT', {
+              method: 'POST', // o GET, dependiendo de la API
+              body: JSON.stringify({ email: email }),
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          });
+          const data = await response.json();
+
+          if(data.existe) {
+              inputEmail.classList.add("is-invalid");
+              btnGuardarAlumno.disabled = true;
+          }
+      } catch (error) {
+          console.error('Error al verificar el email', error);
+      }
+  }*/
 });
