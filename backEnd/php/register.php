@@ -33,7 +33,7 @@ if (isset($_POST['email'], $_POST['nombre'], $_POST['asignatura'], $_POST['passw
                 $mail->Host = 'smtp.gmail.com';
                 $mail->SMTPAuth = true;
                 $mail->Username = 'issaequipoimagen@gmail.com';
-                $mail->Password = 'zcmrhxsqebxqonyo'; // Usa una contraseña de aplicación en producción
+                $mail->Password = 'biffulmsefcedcjk'; // Usa una contraseña de aplicación en producción
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->Port = 587;
             
