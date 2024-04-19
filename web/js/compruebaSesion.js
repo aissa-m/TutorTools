@@ -1,6 +1,6 @@
 // const URL = '../../backEnd/php/';
   
-fetch(URL + "compruebaSesion.php")
+fetch('../../backEnd/php/' + "compruebaSesion.php")
   .then((res) => res.json())
   .then((data) => {
     if (!data.logueado) {
