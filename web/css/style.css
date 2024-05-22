@@ -13,8 +13,7 @@ body {
   border-radius: 5px;
 }
 
-img:hover,
-button:hover {
+img:hover{
   transform: scale(1.1);
   cursor: pointer;
 }

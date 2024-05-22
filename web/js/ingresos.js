@@ -57,7 +57,7 @@ function getIngresos() {
         Object.keys(ingresosPorMes).forEach((nombreMes, index) => {
           // Crear el elemento acordeón para el mes
           const acordeonItem = `
-            <div class="card" style="background-color: rgba(0, 0, 0, 0.2);">
+            <div class="card" style="">
               <div class="card-header" id="heading${index}">
                 <h2 class="mb-0">
                   <button class="btn btn-link btn-block text-left " type="button" data-toggle="collapse" data-target="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}" style="color: black;">
@@ -71,7 +71,7 @@ function getIngresos() {
                 ${ingresosPorMes[nombreMes].ingresos
                   .map(
                     (ingreso) => `
-                      <div class="card mb-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                      <div class="card mb-3" style="">
                         <div class="card-body">
                           <h5 class="card-title">${ingreso.nombre}</h5>
                           <p class="card-text">Monto: ${ingreso.monto}€</p>
