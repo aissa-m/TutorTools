@@ -1,11 +1,12 @@
 const URL = "../../backEnd/php/";
+
 function getPendientes() {
   fetch(URL + "getPagosPendientes.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
   })
-    .then((response) => response.json())
-    .then((pendientes) => {
+    .then(response => response.json())
+    .then(pendientes => {
       const contenedor = document.getElementById("contenedor-pendientes");
       contenedor.innerHTML = "";
       if (pendientes === "No hay datos") {
@@ -30,7 +31,7 @@ function getPendientes() {
         }, {});
 
         // Crear una tarjeta por alumno
-        Object.values(pendientesPorAlumno).forEach((alumno) => {
+        Object.values(pendientesPorAlumno).forEach(alumno => {
           const tarjeta = `
             <div class="col-md-4 mb-4">
               <div class="card h-100" style="background-color: rgba(0, 0, 0, 0.2);">
@@ -38,8 +39,13 @@ function getPendientes() {
                   <h5 class="card-title">${alumno.nombre}</h5>
                   ${alumno.pagos
                     .map(
-                      (pago) => `
-                    <p class="card-text">${pago.monto}€ - ${pago.fecha}</p>
+                      pago => `
+                    <div class="form-check">
+                      <input class="form-check-input pagoCheckbox" type="checkbox" value="${pago.id}" id="pago-${pago.id}">
+                      <label class="form-check-label" for="pago-${pago.id}">
+                        ${pago.monto}€ - ${pago.fecha}
+                      </label>
+                    </div>
                   `
                     )
                     .join("")}
@@ -47,12 +53,8 @@ function getPendientes() {
                     2
                   )}€</strong></p>
                   <div class="mt-2">
-                    <button class='btn btn-success pagarBtn' data-id='${
-                      alumno.pagos[0].id
-                    }'>Pagar Último</button>
-                    <button class="btn btn-danger eliminar" data-id="${
-                      alumno.pagos[0].id
-                    }" data-tipo="pendiente">Eliminar</button>
+                    <button class='btn btn-success pagarSeleccionados' data-alumno='${alumno.nombre}'>Registrar</button>
+                    <button class='btn btn-danger eliminarSeleccionados' data-alumno='${alumno.nombre}'>Eliminar</button>
                   </div>
                 </div>
               </div>
@@ -61,31 +63,96 @@ function getPendientes() {
           contenedor.insertAdjacentHTML("beforeend", tarjeta);
         });
 
-        // Reiniciar y añadir escuchadores de eventos a los botones
+        // Añadir escuchadores de eventos a los botones
         addEventListenersToButtons();
       }
     })
-    .catch((error) => {
+    .catch(error => {
       console.error("Error:", error);
     });
 }
 
 function addEventListenersToButtons() {
-  document.querySelectorAll(".pagarBtn").forEach((button) => {
+  document.querySelectorAll(".pagarSeleccionados").forEach(button => {
     button.addEventListener("click", function () {
-      pagar(this.getAttribute("data-id"));
+      const alumno = this.getAttribute("data-alumno");
+      const seleccionados = Array.from(document.querySelectorAll(`.pagoCheckbox:checked`))
+        .filter(checkbox => checkbox.closest('.card').querySelector('.card-title').innerText === alumno)
+        .map(checkbox => checkbox.value);
+      if (seleccionados.length > 0) {
+        pagarSeleccionados(seleccionados);
+      } else {
+        alert("Selecciona al menos un pago para registrar.");
+      }
+    });
+  });
+
+  document.querySelectorAll(".eliminarSeleccionados").forEach(button => {
+    button.addEventListener("click", function () {
+      const alumno = this.getAttribute("data-alumno");
+      const seleccionados = Array.from(document.querySelectorAll(`.pagoCheckbox:checked`))
+        .filter(checkbox => checkbox.closest('.card').querySelector('.card-title').innerText === alumno)
+        .map(checkbox => checkbox.value);
+      if (seleccionados.length > 0) {
+        eliminarSeleccionados(seleccionados);
+      } else {
+        alert("Selecciona al menos un pago para eliminar.");
+      }
     });
   });
 }
 
+function pagarSeleccionados(idsPagosPendientes) {
+  fetch(URL + "pagarSeleccionados.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ ids: idsPagosPendientes }),
+  })
+    .then(response => response.json())
+    .then(res => {
+      if (res === "Exito") {
+        // alert("Pagos registrados!");
+        location.reload(); // Recargar la página o actualizar la tabla de pendientes
+      } else {
+        alert("Error al registrar los pagos!" + res);
+      }
+    })
+    .catch(error => {
+      console.error("Error del servidor:", error);
+    });
+}
+
+function eliminarSeleccionados(idsPagosPendientes) {
+  fetch(URL + "eliminarSeleccionados.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ ids: idsPagosPendientes }),
+  })
+    .then(response => response.json())
+    .then(res => {
+      if (res === "Exito") {
+        // alert("Pagos eliminados!");
+        location.reload(); // Recargar la página o actualizar la tabla de pendientes
+      } else {
+        alert("Error al eliminar los pagos!" + res);
+      }
+    })
+    .catch(error => {
+      console.error("Error del servidor:", error);
+    });
+}
+
 function cargarAlumnos() {
   fetch(URL + "getStudents_back.php")
-    .then((response) => response.json())
-    .then((data) => {
-      // console.log(data)
+    .then(response => response.json())
+    .then(data => {
       if (data.success) {
         const select = document.getElementById("alumnoSelect");
-        data.alumnos.forEach((alumno) => {
+        data.alumnos.forEach(alumno => {
           const option = document.createElement("option");
           option.value = alumno.id;
           option.textContent = alumno.nombre;
@@ -93,7 +160,7 @@ function cargarAlumnos() {
         });
       }
     })
-    .catch((error) => console.error("Error:", error));
+    .catch(error => console.error("Error:", error));
 }
 
 function guardarPendiente() {
@@ -101,25 +168,21 @@ function guardarPendiente() {
     .getElementById("formAgregarPendiente")
     .addEventListener("submit", function (e) {
       e.preventDefault();
-      // const horas = document.getElementById('horas').value;
-      // const monto = horas * 12;
       var formData = new FormData(this);
-      // formData.append('monto', monto);
       fetch(URL + "setPagoP.php", {
         method: "POST",
         body: formData,
       })
-        .then((respones) => respones.json())
-        .then((data) => {
+        .then(response => response.json())
+        .then(data => {
           if (data === "Exito") {
             location.href = "ingresos_pendientes.html";
           } else {
-            // alert("Error al añadir alumno");
+            console.error("Error al añadir alumno");
           }
         })
-        .catch((error) => {
-          console.error('Ha habido un error' +error);
-          // alert("Error al enviar los datos");
+        .catch(error => {
+          console.error("Ha habido un error: " + error);
         });
     });
 }
@@ -132,8 +195,8 @@ function pagar(idPagoPendiente) {
     },
     body: JSON.stringify({ id: idPagoPendiente }),
   })
-    .then((response) => response.json())
-    .then((res) => {
+    .then(response => response.json())
+    .then(res => {
       if (res === "Exito") {
         alert("Pago registrado!");
         location.reload(); // Recargar la página o actualizar la tabla de pendientes
@@ -141,7 +204,29 @@ function pagar(idPagoPendiente) {
         alert("Error al registrar el pago!" + res);
       }
     })
-    .catch((error) => {
+    .catch(error => {
+      console.error("Error del servidor:", error);
+    });
+}
+
+function eliminar(idPagoPendiente) {
+  fetch(URL + "eliminar.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ id: idPagoPendiente }),
+  })
+    .then(response => response.json())
+    .then(res => {
+      if (res === "Exito") {
+        alert("Pago eliminado!");
+        location.reload(); // Recargar la página o actualizar la tabla de pendientes
+      } else {
+        alert("Error al eliminar el pago!" + res);
+      }
+    })
+    .catch(error => {
       console.error("Error del servidor:", error);
     });
 }
@@ -151,9 +236,8 @@ function getTotalPendiente() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
   })
-    .then((response) => response.json())
-    .then((total) => {
-      console.log(total)
+    .then(response => response.json())
+    .then(total => {
       const card = document.getElementById("totalP");
       const cardBody = `
       <div class="card-body"> 
@@ -163,6 +247,7 @@ function getTotalPendiente() {
       card.insertAdjacentHTML("beforeend", cardBody);
     });
 }
+
 document.addEventListener("DOMContentLoaded", function () {
   getPendientes();
   cargarAlumnos();
