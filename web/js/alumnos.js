@@ -1,36 +1,61 @@
 const URL = "../../backEnd/php/";
+
 function getAlumnos() {
-  fetch(URL + "getStudents_back.php")
-    .then((response) => response.json()) // Convierte la respuesta a JSON
-    .then((data) => {
-      if (data.success) {
-        const contenedor = document.getElementById("contenedor-alumnos");
-        contenedor.innerHTML = ""; // Limpia el contenido actual del contenedor
-        data.alumnos.forEach((alumno) => {
-          const card = `
-                      <div class="col-md-4 mb-4 tarjeta-alumno">
-                          <div class="card" style="background-color: rgba(0, 0, 0, 0.2);" onclick="verDetallesAlumno(${alumno.id})">
-                              <div class="card-body">
-                                  <h5 class="card-title">${alumno.nombre}</h5>                                
-                              </div>
-                          </div>
-                      </div>
-                  `;
-          contenedor.insertAdjacentHTML("beforeend", card);
+    fetch(URL + "getStudents_back.php")
+        .then((response) => response.json()) // Convierte la respuesta a JSON
+        .then((data) => {
+            if (data.success) {
+                renderAlumnos(data.alumnos);
+            } else {
+                const h2 = document.getElementById("titulo");
+                h2.innerText = "No hay datos todavía!";
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
         });
-      } else {
-        const h2 = document.getElementById("titulo");
-        h2.innerText = "No hay datos todavia!";
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error);
+}
+
+function renderAlumnos(alumnos) {
+    const contenedor = document.getElementById("contenedor-alumnos");
+    contenedor.innerHTML = ""; // Limpia el contenido actual del contenedor
+    alumnos.forEach((alumno) => {
+        const card = `
+            <div class="col-md-4 mb-4 tarjeta-alumno">
+                <div class="card" style="background-color: rgba(0, 0, 0, 0.2);" onclick="verDetallesAlumno(${alumno.id})">
+                    <div class="card-body">
+                        <h5 class="card-title">${alumno.nombre}</h5>
+                    </div>
+                </div>
+            </div>
+        `;
+        contenedor.insertAdjacentHTML("beforeend", card);
     });
 }
 
+function aplicarFiltros() {
+    const nombreFiltro = document.getElementById("input").value.toLowerCase();
+    fetch(URL + "getStudents_back.php")
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                let alumnosFiltrados = data.alumnos;
+                if (nombreFiltro) {
+                    alumnosFiltrados = alumnosFiltrados.filter(alumno => alumno.nombre.toLowerCase().includes(nombreFiltro));
+                }
+                renderAlumnos(alumnosFiltrados);
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
-  getAlumnos();
+    getAlumnos();
+    document.getElementById("input").addEventListener("input", aplicarFiltros);
 });
+
 
 function verDetallesAlumno(id) {
   localStorage.setItem("alumnoId", id);
