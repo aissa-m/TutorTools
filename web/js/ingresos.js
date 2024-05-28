@@ -39,63 +39,112 @@ function agruparIngresosPorMes(ingresos) {
 }
 
 
+
 function getIngresos() {
-  fetch(URL+'ingresos.php', {
+  fetch(URL + 'ingresos.php', {
     method: 'POST',
-    headers:{'Content-Type': 'application/json'},
+    headers: {'Content-Type': 'application/json'},
   })
-    .then((response) => response.json())
-    .then((ingresos) => {
-      const contenedorAcordeon = document.getElementById("acordeon-ingresos");
-      contenedorAcordeon.innerHTML = ""; // Limpia el contenedor antes de añadir los nuevos datos
+  .then((response) => response.json())
+  .then((ingresos) => {
+    const contenedorAcordeon = document.getElementById("acordeon-ingresos");
+    contenedorAcordeon.innerHTML = ""; // Limpia el contenedor antes de añadir los nuevos datos
 
-      if (ingresos === "No hay datos") {
-        document.getElementById("titulo").innerText = "No hay datos todavía!";
-      } else {
-        const ingresosPorMes = agruparIngresosPorMes(ingresos);
+    if (ingresos === "No hay datos") {
+      document.getElementById("titulo").innerText = "No hay datos todavía!";
+    } else {
+      const ingresosPorMes = agruparIngresosPorMes(ingresos);
 
-        Object.keys(ingresosPorMes).forEach((nombreMes, index) => {
-          // Crear el elemento acordeón para el mes
-          const acordeonItem = `
-            <div class="card" style="">
-              <div class="card-header" id="heading${index}">
-                <h2 class="mb-0">
-                  <button class="btn btn-link btn-block text-left " type="button" data-toggle="collapse" data-target="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}" style="color: black;">
-                    ${nombreMes} - Total: ${ingresosPorMes[nombreMes].total.toFixed(2)}€
-                  </button>
-                </h2>
-              </div>
-              <div id="collapse${index}" class="collapse" aria-labelledby="heading${index}" data-parent="#acordeon-ingresos">
-
+      Object.keys(ingresosPorMes).forEach((nombreMes, index) => {
+        // Crear el elemento acordeón para el mes
+        const acordeonItem = `
+          <div class="card" style="background-color: rgba(0, 0, 0, 0.2);">
+            <div class="card-header" id="heading${index}">
+              <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}" style="color: black;">
+                  ${nombreMes} - Total: ${ingresosPorMes[nombreMes].total.toFixed(2)}€
+                </button>
+              </h2>
+            </div>
+            <div id="collapse${index}" class="collapse" aria-labelledby="heading${index}" data-parent="#acordeon-ingresos">
               <div class="card-body">
-                ${ingresosPorMes[nombreMes].ingresos
-                  .map(
-                    (ingreso) => `
-                      <div class="card mb-3" style="">
-                        <div class="card-body">
-                          <h5 class="card-title">${ingreso.nombre}</h5>
-                          <p class="card-text">Monto: ${ingreso.monto}€</p>
-                          <p class="card-text">Fecha: ${ingreso.fecha}</p>
-                          <button class="btn btn-secondary eliminar" data-id="${ingreso.id}" data-tipo="ingreso">Eliminar</button>
+                <div id="filtros${index}" class="filtros">
+                  <input type="text" id="filtroNombre${index}" placeholder="Filtrar por nombre" class="input3" pattern="\d+" >
+                  <input type="date" id="filtroFecha${index}" placeholder="Filtrar por fecha" class="input3" pattern="\d+" >
+                  <button class="btn1 mb-1" id="aplicarFiltros${index}">Aplicar filtros</button>
+                </div>
+                <div id="ingresos-lista${index}">
+                  ${ingresosPorMes[nombreMes].ingresos
+                    .map(
+                      (ingreso) => `
+                        <div class="card mb-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                          <div class="card-body">
+                            <h5 class="card-title">${ingreso.nombre}</h5>
+                            <p class="card-text">Monto: ${ingreso.monto}€</p>
+                            <p class="card-text">Fecha: ${ingreso.fecha}</p>
+                            <button class="btn btn-secondary eliminar" data-id="${ingreso.id}" data-tipo="ingreso">Eliminar</button>
+                          </div>
                         </div>
-                      </div>
-                    `
-                  )
-                  .join("")}
-              </div>
-
-            </div>            
+                      `
+                    )
+                    .join("")}
+                </div>
               </div>
             </div>
-          `;
-          contenedorAcordeon.insertAdjacentHTML("beforeend", acordeonItem);
+          </div>
+        `;
+        contenedorAcordeon.insertAdjacentHTML("beforeend", acordeonItem);
+
+        // Añadir evento al botón de aplicar filtros de cada tarjeta
+        document.getElementById(`aplicarFiltros${index}`).addEventListener("click", () => {
+          aplicarFiltrosPorMes(nombreMes, index);
         });
-      }
-    })
-    .catch((e) => {
-      console.error(e);
-    });
+      });
+    }
+  })
+  .catch((e) => {
+    console.error(e);
+  });
 }
+
+function aplicarFiltrosPorMes(nombreMes, index) {
+  // Obtener valores de los filtros específicos de la tarjeta
+  const filtroNombre = document.getElementById(`filtroNombre${index}`).value.toLowerCase();
+  const filtroFecha = document.getElementById(`filtroFecha${index}`).value;
+
+  fetch(URL + 'ingresos.php', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+  })
+  .then((response) => response.json())
+  .then((ingresos) => {
+    const ingresosPorMes = agruparIngresosPorMes(ingresos);
+    const ingresosFiltrados = ingresosPorMes[nombreMes].ingresos.filter((ingreso) => {
+      return (
+        (filtroNombre === "" || ingreso.nombre.toLowerCase().includes(filtroNombre)) &&
+        (filtroFecha === "" || ingreso.fecha === filtroFecha)
+      );
+    });
+
+    const contenedorIngresos = document.getElementById(`ingresos-lista${index}`);
+    contenedorIngresos.innerHTML = ingresosFiltrados.map(
+      (ingreso) => `
+        <div class="card mb-3" style="background-color: rgba(0, 0, 0, 0.2);">
+          <div class="card-body">
+            <h5 class="card-title">${ingreso.nombre}</h5>
+            <p class="card-text">Monto: ${ingreso.monto}€</p>
+            <p class="card-text">Fecha: ${ingreso.fecha}</p>
+            <button class="btn btn-secondary eliminar" data-id="${ingreso.id}" data-tipo="ingreso">Eliminar</button>
+          </div>
+        </div>
+      `
+    ).join("");
+  })
+  .catch((e) => {
+    console.error(e);
+  });
+}
+
 
 function cargarAlumnos() {
   fetch(URL + "getStudents_back.php")

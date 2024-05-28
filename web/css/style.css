@@ -195,3 +195,144 @@ button,
   border-width: 0 0.15em 0.15em 0;
   transform: rotate(45deg);
  }
+
+
+
+ /* ------------------------------------ */
+ .input2 {
+  max-width: 190px;
+  padding: 6px;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 2px 2px 7px 0 rgb(0, 0, 0, 0.2);
+  outline: none;
+  color: dimgray;
+}
+
+.filtros{
+  margin: 10px;
+}
+.input2:invalid {
+  animation: justshake 0.3s forwards;
+  color: rgb(0, 191, 255);
+}
+
+@keyframes justshake {
+  25% {
+    transform: translateX(5px);
+  }
+
+  50% {
+    transform: translateX(-5px);
+  }
+
+  75% {
+    transform: translateX(5px);
+  }
+
+  100% {
+    transform: translateX-(5px);
+  }
+}
+
+
+.input3 {
+  background-color: #292929;
+  border: 1px solid #3e3e3e;
+  border-radius: 8px;
+  color: #fff;
+  padding: 6px 14px;
+  text-decoration: none;
+  font-size: 16px;
+  margin: 12px 14px;
+  cursor: pointer;
+}
+
+.input3:hover {
+  border: 1px solid #fff;
+}
+
+
+.btn1 {
+  padding: 0.3rem 0.8rem;
+  font-weight: 700;
+  background: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  border-radius: .5rem;
+  border-bottom: 2px solid blueviolet;
+  border-right: 2px solid blueviolet;
+  border-top: 2px solid white;
+  border-left: 2px solid white;
+  transition-duration: 1s;
+  transition-property: border-top, 
+     border-left, 
+     border-bottom,
+     border-right,
+     box-shadow;
+ }
+ 
+ .btn1:hover {
+  border-top: 2px solid blueviolet;
+  border-left: 2px solid blueviolet;
+  border-bottom: 2px solid rgb(238, 103, 238);
+  border-right: 2px solid rgb(238, 103, 238);
+  box-shadow: rgba(240, 46, 170, 0.4) 5px 5px, rgba(240, 46, 170, 0.3) 10px 10px, rgba(240, 46, 170, 0.2) 15px 15px;
+ }
+
+
+ /* --------------------------button---------------------------- */
+ .button {
+  position: relative;
+  width: 120px;
+  height: 40px;
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  color: white;
+  flex-direction: column;
+  justify-content: center;
+  border: none;
+  padding: 12px;
+  gap: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  left: -4px;
+  top: -1px;
+  margin: auto;
+  width: 128px;
+  height: 48px;
+  border-radius: 10px;
+  background: linear-gradient(-45deg, #e81cff 0%, #40c9ff 100% );
+  z-index: -10;
+  pointer-events: none;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.button::after {
+  content: "";
+  z-index: -1;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(-45deg, #fc00ff 0%, #00dbde 100% );
+  transform: translate3d(0, 0, 0) scale(0.95);
+  filter: blur(20px);
+}
+
+.button:hover::after {
+  filter: blur(30px);
+}
+
+.button:hover::before {
+  transform: rotate(-180deg);
+}
+
+.button:active::before {
+  scale: 0.7;
+}
+
