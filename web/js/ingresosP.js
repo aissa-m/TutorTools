@@ -41,7 +41,15 @@ function getPendientes() {
                     .map(
                       pago => `
                     <div class="form-check">
-                      <input class="form-check-input pagoCheckbox" type="checkbox" value="${pago.id}" id="pago-${pago.id}">
+
+                      <label class="contenedor">
+                        <input type="checkbox" checked="checked" class="pagoCheckbox" value="${pago.id}" id="pago-${pago.id}">
+                        <div class="checkmark"></div>
+                      </label>
+
+                      <!-- <input class="form-check-input pagoCheckbox" type="checkbox" value="${pago.id}" id="pago-${pago.id}"> -->
+
+
                       <label class="form-check-label" for="pago-${pago.id}">
                         ${pago.monto}€ - ${pago.fecha}
                       </label>
@@ -73,6 +81,7 @@ function getPendientes() {
 }
 
 function addEventListenersToButtons() {
+
   document.querySelectorAll(".pagarSeleccionados").forEach(button => {
     button.addEventListener("click", function () {
       const alumno = this.getAttribute("data-alumno");
