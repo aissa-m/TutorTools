@@ -3,8 +3,8 @@
 $server = 'localhost';
 $user = 'root';
 $pass = '';
-// $pass = '16782794Issa..';
-$dbname = 'control_clases';
+$pass = '16782794Issa..';
+// $dbname = 'control_clases';
 
 $conexion = new mysqli($server, $user, $pass, $dbname);
 if($conexion->connect_error){
