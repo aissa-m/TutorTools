@@ -87,7 +87,7 @@ function abrirModalRegistro(nombreAlumno) {
       <div class="d-flex justify-content-between mb-1">
         <span>${p.fecha} — <strong>${p.monto}€</strong></span>
       </div>
-      <input type="number" step="0.01" min="0" max="${p.monto}" value="${p.monto}" 
+      <input type="number" step="0.01" min="0" max="${p.monto}" value="0" 
         class="form-control inputPago" data-id="${p.id}">
     </div>
   `).join("");
