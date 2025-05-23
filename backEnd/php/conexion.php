@@ -2,9 +2,9 @@
 
 $server = 'localhost';
 $user = 'root';
-$pass = '';
+// $pass = '';
 $pass = '16782794Issa..';
-// $dbname = 'control_clases';
+$dbname = 'control_clases';
 
 $conexion = new mysqli($server, $user, $pass, $dbname);
 if($conexion->connect_error){
