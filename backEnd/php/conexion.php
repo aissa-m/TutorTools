@@ -2,7 +2,8 @@
 
 $server = 'localhost';
 $user = 'root';
-$pass = '16782794Issa..';
+$pass = '';
+// $pass = '16782794Issa..';
 $dbname = 'control_clases';
 
 $conexion = new mysqli($server, $user, $pass, $dbname);
