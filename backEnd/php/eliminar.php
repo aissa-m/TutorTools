@@ -4,6 +4,8 @@ include 'conexion.php';
 $data = json_decode(file_get_contents('php://input'), true);
 session_start();
 
+header('Content-Type: application/json');
+
 // Verificar la autenticación del usuario
 if (!isset($_SESSION['loged'])) {
     http_response_code(403); // Forbidden
@@ -12,8 +14,9 @@ if (!isset($_SESSION['loged'])) {
 }
 
 $idProfe = $_SESSION["userId"];
-if ($data && $idProfe) {
-    $id = $data['id'];
+
+if ($data && $idProfe && isset($data['id']) && isset($data['tipo'])) {
+    $id = (int)$data['id'];
     $tipo = $data['tipo'];
     $tabla = '';
 
@@ -45,4 +48,6 @@ if ($data && $idProfe) {
     } else {
         echo json_encode('Tipo de registro no válido');
     }
+} else {
+    echo json_encode('Datos incompletos');
 }

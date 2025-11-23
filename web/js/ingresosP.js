@@ -80,52 +80,154 @@ function verHistorial(nombreAlumno) {
 }
 
 
+// Variable global para saber sobre qué alumno estamos registrando el pago
+let alumnoActualNombre = null;
+
 function abrirModalRegistro(nombreAlumno) {
-  const alumnoData = Object.values(pendientesPorAlumno).find(a => a.nombre === nombreAlumno);
-  const detalle = alumnoData.pagos.map(p => `
-    <div class="mb-3 p-2 border rounded">
-      <div class="d-flex justify-content-between mb-1">
-        <span>${p.fecha} — <strong>${p.monto}€</strong></span>
-      </div>
-      <input type="number" step="0.01" min="0" max="${p.monto}" value="0" 
-        class="form-control inputPago" data-id="${p.id}">
+  const alumnoData = Object.values(pendientesPorAlumno).find(
+    (a) => a.nombre === nombreAlumno
+  );
+
+  if (!alumnoData) {
+    alert("No se han encontrado pagos pendientes para este alumno.");
+    return;
+  }
+
+  alumnoActualNombre = nombreAlumno;
+
+  const listadoPendientes = alumnoData.pagos
+    .map((p) => {
+      const monto = parseFloat(p.monto).toFixed(2);
+
+      return `
+        <div class="card mb-3 shadow-sm border-0" style="background-color: #f8f9fa;">
+          <div class="card-body py-3">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <div class="fw-semibold">Fecha: ${p.fecha}</div>
+                <div class="text-muted small">Horas: ${p.horas}</div>
+              </div>
+              <div class="text-end">
+                <div class="text-muted small">Pendiente actual</div>
+                <div class="fw-bold">${monto} €</div>
+              </div>
+            </div>
+
+            <hr class="my-2" />
+
+            <div class="row g-2 align-items-center">
+              <div class="col-7">
+                <label class="form-label mb-1 small">Nuevo monto pendiente</label>
+                <input 
+                  type="number" 
+                  step="0.01" 
+                  min="0.01" 
+                  class="form-control form-control-sm" 
+                  id="montoPendiente-${p.id}" 
+                  value="${monto}"
+                >
+              </div>
+              <div class="col-5 d-flex justify-content-end gap-2">
+                <button 
+                  type="button" 
+                  class="btn btn-sm btn-success flex-fill"
+                  onclick="actualizarPendiente(${p.id})"
+                >
+                  Guardar
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-sm btn-outline-danger flex-fill"
+                  onclick="eliminar(${p.id})"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+
+  const totalPendiente = alumnoData.total.toFixed(2);
+
+  const detalle = `
+    <div class="mb-3">
+      ${listadoPendientes || "<p>No hay pagos pendientes para este alumno.</p>"}
     </div>
-  `).join("");
+
+    <div class="alert alert-light border d-flex justify-content-between align-items-center mb-3">
+      <span class="fw-semibold">Total pendiente:</span>
+      <span class="fw-bold">${totalPendiente} €</span>
+    </div>
+
+    <div class="mb-2">
+      <label for="importePago" class="form-label">Importe a pagar ahora</label>
+      <input 
+        type="number" 
+        step="0.01" 
+        min="0.01" 
+        max="${totalPendiente}" 
+        class="form-control" 
+        id="importePago"
+      >
+    </div>
+    <small class="text-muted">
+      El importe no puede superar el total pendiente del alumno.
+    </small>
+  `;
 
   document.getElementById("modalNombreAlumno").textContent = nombreAlumno;
   document.getElementById("detallePagosAlumno").innerHTML = detalle;
   new bootstrap.Modal(document.getElementById("modalRegistroPago")).show();
-
-
 }
 
-function confirmarPagos() {
-  const pagos = Array.from(document.querySelectorAll(".inputPago")).map(input => {
-    return {
-      id: parseInt(input.dataset.id),
-      monto: parseFloat(input.value)
-    };
-  }).filter(p => p.monto > 0);
-
-  if (pagos.length === 0) {
-    alert("No se ha introducido ningún monto válido.");
+// ---------------------------------------------
+function actualizarPendiente(idPendiente) {
+  const input = document.getElementById(`montoPendiente-${idPendiente}`);
+  if (!input) {
+    alert("No se encontró el campo del monto.");
     return;
   }
 
-  fetch(URL + "pagarSeleccionados.php", {
+  const nuevoMonto = parseFloat(input.value);
+
+  if (isNaN(nuevoMonto) || nuevoMonto <= 0) {
+    alert("Introduce un monto válido mayor que 0.");
+    input.focus();
+    return;
+  }
+
+  if (!confirm("¿Quieres guardar este nuevo monto pendiente?")) {
+    return;
+  }
+
+  fetch(URL + "actualizarPagoPendiente.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ pagos })
+    body: JSON.stringify({
+      id: idPendiente,
+      monto: nuevoMonto
+    }),
   })
-    .then(res => res.json())
-    .then(data => {
+    .then((res) => res.json())
+    .then((data) => {
       if (data === "Exito") {
+        alert("Pendiente actualizado correctamente.");
+        // Puedes recargar todo, o si quieres algo más fino, volver a llamar a getPendientes()
         location.reload();
       } else {
-        alert("Error: " + JSON.stringify(data));
+        alert("Error al actualizar el pendiente: " + JSON.stringify(data));
       }
+    })
+    .catch((err) => {
+      console.error("Error del servidor:", err);
+      alert("Se ha producido un error en el servidor.");
     });
 }
+
+// ----------------------------------------------
 
 
 
@@ -299,7 +401,7 @@ function pagar(idPagoPendiente) {
     .then(res => {
       if (res === "Exito") {
         alert("Pago registrado!");
-        location.reload(); // Recargar la página o actualizar la tabla de pendientes
+        location.reload();
       } else {
         alert("Error al registrar el pago!" + res);
       }
@@ -310,26 +412,88 @@ function pagar(idPagoPendiente) {
 }
 
 function eliminar(idPagoPendiente) {
+  if (!confirm("¿Seguro que quieres eliminar este pago pendiente?")) return;
+
   fetch(URL + "eliminar.php", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ id: idPagoPendiente }),
+    body: JSON.stringify({ 
+      id: idPagoPendiente,
+      tipo: "pendiente"
+    }),
   })
-    .then(response => response.json())
-    .then(res => {
+    .then((response) => response.json())
+    .then((res) => {
       if (res === "Exito") {
         alert("Pago eliminado!");
-        location.reload(); // Recargar la página o actualizar la tabla de pendientes
+        location.reload();
       } else {
-        alert("Error al eliminar el pago!" + res);
+        alert("Error al eliminar el pago: " + JSON.stringify(res));
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("Error del servidor:", error);
     });
 }
+
+
+// ---------------------------------------------
+function confirmarPagos() {
+  const inputImporte = document.getElementById("importePago");
+  if (!inputImporte) {
+    alert("No se ha encontrado el campo de importe.");
+    return;
+  }
+
+  const importe = parseFloat(inputImporte.value);
+  const max = parseFloat(inputImporte.max || "0");
+
+  if (isNaN(importe) || importe <= 0) {
+    alert("Introduce un importe válido mayor que 0.");
+    return;
+  }
+
+  if (!isNaN(max) && max > 0 && importe > max) {
+    alert("El importe no puede ser mayor que el total pendiente (" + max.toFixed(2) + " €).");
+    return;
+  }
+
+  if (!alumnoActualNombre) {
+    alert("No se ha identificado el alumno para registrar el pago.");
+    return;
+  }
+
+  // Aquí podrías enviar también un alumno_id si lo tienes guardado.
+  const payload = {
+    nombre_alumno: alumnoActualNombre,
+    importe: importe
+  };
+
+  fetch(URL + "pagoUnico.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data === "Exito") {
+        alert("Pago registrado correctamente.");
+        location.reload();
+      } else {
+        alert("Error al registrar el pago: " + JSON.stringify(data));
+      }
+    })
+    .catch((err) => {
+      console.error("Error del servidor:", err);
+      alert("Se ha producido un error en el servidor.");
+    });
+}
+
+
+// ---------------------------------------------
+
 
 function getTotalPendiente() {
   fetch(URL + "getTotalP.php", {
